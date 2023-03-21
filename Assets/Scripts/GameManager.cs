@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,7 +9,7 @@ public class GameManager : MonoBehaviour
       [SerializeField] private GameObject playerManager, playerCamera;
      
       private IGameView gameView;
-      private int _levelIndex;
+     
       private DummyController controller;
       private PlayerDummyManager dummyManager;
       private void Start( ) {
@@ -23,7 +24,7 @@ public class GameManager : MonoBehaviour
             };
       }
       public void RestartLevel( ) {
-            SceneManager.LoadScene( _levelIndex );
+            SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex );
       }
       public void LevelBegin( ) {
             controller.enabled = true;
@@ -34,11 +35,11 @@ public class GameManager : MonoBehaviour
             gameView.ShowFinalPanel( );
       }
       public void LoadNextLevel( ) {
-            _levelIndex++;
-            if(_levelIndex >= 3) {
-                  _levelIndex = 0;
-            }
-            SceneManager.LoadScene( _levelIndex );
+
+            int nextSceneID = SceneManager.GetActiveScene().buildIndex + 1;
+            if ( nextSceneID >= 3 )
+                  nextSceneID = 0;
+            SceneManager.LoadScene(nextSceneID);
             gameView.ShowStartPanel( );
       }
       void Update( ) {
