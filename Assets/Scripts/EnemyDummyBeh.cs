@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
 
 public class EnemyDummyBeh : DummyBeh
@@ -13,18 +11,16 @@ public class EnemyDummyBeh : DummyBeh
             }
       }
       public override void Move( ) {
-            if ( state == 1 ) {
-                  if ( target != null ) {
-
+            if ( State == 1 ) {
+                  if ( Target != null ) {
                         Rb.MovePosition( Vector3.MoveTowards( transform.position ,
-                              target.position ,
+                              Target.position ,
                               Speed * Time.deltaTime ) );
-
                   }
                   else {
                        
                         Animator.SetBool( "Attack" , false );
-                        state = 0;
+                        State = 0;
                   }
             }
       }

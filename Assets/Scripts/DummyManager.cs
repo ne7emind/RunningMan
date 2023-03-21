@@ -6,14 +6,11 @@ abstract public class DummyManager : MonoBehaviour
       [Range(0, 1)] [SerializeField] private float DistanceBtwDummies, FormationRadius;
       public float VerticalOffset;
       public event System.Action<string> DummiesAmountChanged;
-      abstract public Transform dummyHolder { get; }
+      abstract public Transform DummyHolder { get; }
       public GameObject DummyPrefab;    
       abstract public TowardsEnemyMovement twrdsMovement { get; }
-     
-    
-      public virtual void Start( ) {                   
-          
-          
+        
+      public virtual void Start( ) {                                      
             twrdsMovement.EnemyKilled += TwrdsMovement_EnemyKilled;
       }
 
@@ -23,29 +20,27 @@ abstract public class DummyManager : MonoBehaviour
       }
       public void DestroyDummies( ) {
 
-            for ( int i = dummyHolder.childCount - 1 ; i >= DummiesCount ; i-- )
-                  Destroy(dummyHolder.GetChild( i ).gameObject);
-                       
-
+            for ( int i = DummyHolder.childCount - 1 ; i >= DummiesCount ; i-- )
+                  Destroy(DummyHolder.GetChild( i ).gameObject);                       
       }
 
       public void FormatDummies( ) {
             float x;
             float z;
             DestroyDummies( );
-            for ( int i = 0 ; i < dummyHolder.childCount ; i++ ) {
+            for ( int i = 0 ; i < DummyHolder.childCount ; i++ ) {
                   x = DistanceBtwDummies * Mathf.Sqrt( i ) * Mathf.Cos( i * FormationRadius );
                   z = DistanceBtwDummies * Mathf.Sqrt( i ) * Mathf.Sin( i * FormationRadius );
                   var dummyNewPos = new Vector3(x, VerticalOffset, z);
      
-                  dummyHolder.GetChild( i ).DOLocalMove( dummyNewPos , 1f ).SetEase( Ease.OutBack );
+                  DummyHolder.GetChild( i ).DOLocalMove( dummyNewPos , 1f ).SetEase( Ease.OutBack );
             }
       }
 
       public virtual void SpawnDummies( int value ) {
        
             for ( int i = 0 ; i < value ; i++ ) {
-                  GameObject gObject = Instantiate( DummyPrefab , transform.position , transform.rotation , dummyHolder );
+                  GameObject gObject = Instantiate( DummyPrefab , transform.position , transform.rotation , DummyHolder );
                   gObject.GetComponent<DummyBeh>( ).DummyDestroyed += DummyManager_DummyDestroyed;
             }
             FormatDummies( );           
@@ -66,7 +61,6 @@ abstract public class DummyManager : MonoBehaviour
       public void AddDummies( int value ) {
             DummiesCount += value;
             SpawnDummies( value );
-
       }
 
       public void MultiplyDummies( float value ) {
@@ -78,12 +72,10 @@ abstract public class DummyManager : MonoBehaviour
             SpawnDummies( DummiesCount - oldDummiesAmount );
       }
       public virtual void SendAttackCommand( Transform target ) {
-                  
+                 
             for ( int i = 0 ; i < DummiesCount ; i++ ) {
-                  dummyHolder.GetChild( i ).GetComponent<DummyBeh>( ).SetTargetAndState( target );
-            }
-           
-        
+                  DummyHolder.GetChild( i ).GetComponent<DummyBeh>( ).SetTargetAndState( target );
+            }                   
       }
     
            

@@ -4,18 +4,18 @@ using UnityEngine.Rendering;
 public class PlayerDummyManager : DummyManager
 {
       public override int DummiesCount { get => _dummiesCount; set => _dummiesCount = value; }
-      public override Transform dummyHolder => transform.GetChild( 0 );
+      public override Transform DummyHolder => transform.GetChild( 0 );
       public override TowardsEnemyMovement twrdsMovement => GetComponent<TowardsEnemyMovement>( );
       public static event System.Action<int> CoinsUpdated;
       private DummyController _dummyController;
       public event System.Action<int> ScoreOnFinish;
       public event System.Action OnFinishReach;
-      public event System.Action playerDead;
+      public event System.Action PlayerDead;
       [SerializeField] private int _dummiesCount = 1;
       [SerializeField] private int startDummyAmount;
       [SerializeField] private int score;
       private IStorable _storable;
-      private bool bossFight;
+      private bool _bossFight;
       bool _firstSpawn = true;
       public override void Start( ) {
             base.Start( );
@@ -45,14 +45,14 @@ public class PlayerDummyManager : DummyManager
       public override void SendAttackCommand( Transform target) {
             base.SendAttackCommand( target );
             _dummyController.enabled = false;
-            if ( bossFight )
+            if ( _bossFight )
                   return;
             twrdsMovement.enabled = true;
             twrdsMovement.Target = target;
       }
       public void SendRunCommand( ) {
-            for ( int i = 0 ; i < dummyHolder.childCount ; i++ ) {
-                  dummyHolder.GetChild( i ).GetComponent<PlayerDummyBeh>( ).PlayRunAnim( );
+            for ( int i = 0 ; i < DummyHolder.childCount ; i++ ) {
+                  DummyHolder.GetChild( i ).GetComponent<PlayerDummyBeh>( ).PlayRunAnim( );
             }
       }
       private void OnLevelFinish( ) {
@@ -60,35 +60,29 @@ public class PlayerDummyManager : DummyManager
             _dummyController.enabled = false;
            
             OnFinishReach?.Invoke( );
-            for ( int i = 0 ; i < dummyHolder.childCount ; i++ )
-                  dummyHolder.GetChild( i ).GetComponent<PlayerDummyBeh>( ).OnLevelFinish( );
+            for ( int i = 0 ; i < DummyHolder.childCount ; i++ )
+                  DummyHolder.GetChild( i ).GetComponent<PlayerDummyBeh>( ).OnLevelFinish( );
 
             FormatDummies( );
 
-            _storable.SaveData( dummyHolder.childCount);
+            _storable.SaveData( DummyHolder.childCount);
 
-            score += dummyHolder.childCount;
+            score += DummyHolder.childCount;
 
             CoinsUpdated?.Invoke( score );
-           
-            
+                      
       }
       public override void Destroy( ) {
             base.Destroy( );
-            playerDead?.Invoke( );
+            PlayerDead?.Invoke( );
       }
 
       public void OnTriggerEnter( Collider other ) {
             if ( other.gameObject.tag == "EnemyArea" ) {
-                  SendAttackCommand( other.transform.GetChild( 0 ).transform);
-              
+                  SendAttackCommand( other.transform.GetChild( 0 ).transform);             
             }
             if ( other.gameObject.tag == "FinishZone" ) {
                   OnLevelFinish( );
             }
-          
-        
-
-
       }
 }

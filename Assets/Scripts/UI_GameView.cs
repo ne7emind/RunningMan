@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class UI_GameView : MonoBehaviour, IGameView
@@ -24,10 +23,4 @@ public class UI_GameView : MonoBehaviour, IGameView
             finishPanel.SetActive( true );
       }
       
-}
-public interface IGameView
-{
-      void HidePanel( );
-      void ShowStartPanel( );
-      void ShowFinalPanel( );
 }

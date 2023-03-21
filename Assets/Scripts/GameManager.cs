@@ -6,18 +6,20 @@ public class GameManager : MonoBehaviour
 {
       [SerializeField] private GameObject playerManager, playerCamera;
      
-      private IGameView gameView;
+      private IGameView _gameView;
      
-      private DummyController controller;
-      private PlayerDummyManager dummyManager;
+      private DummyController _controller;
+
+      private PlayerDummyManager _dummyManager;
+
       private void Start( ) {
-            gameView = UI_GameView.Instance;
-            controller = playerManager.GetComponent<DummyController>( );
-            dummyManager = playerManager.GetComponent<PlayerDummyManager>( );
-            dummyManager.OnFinishReach += ( ) => {
+            _gameView = UI_GameView.Instance;
+            _controller = playerManager.GetComponent<DummyController>( );
+            _dummyManager = playerManager.GetComponent<PlayerDummyManager>( );
+            _dummyManager.OnFinishReach += ( ) => {
                   Invoke( nameof( OnLevelFinish ) , 1f );
             };
-            dummyManager.playerDead += ( ) => {
+            _dummyManager.PlayerDead += ( ) => {
                   Invoke( nameof( RestartLevel ) , 1f );
             };
       }
@@ -25,12 +27,12 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex );
       }
       public void LevelBegin( ) {
-            controller.enabled = true;
-            gameView.HidePanel( );
-            dummyManager.SendRunCommand( );
+            _controller.enabled = true;
+            _gameView.HidePanel( );
+            _dummyManager.SendRunCommand( );
       }
       public void OnLevelFinish( ) {
-            gameView.ShowFinalPanel( );
+            _gameView.ShowFinalPanel( );
       }
       public void LoadNextLevel( ) {
 
@@ -38,7 +40,7 @@ public class GameManager : MonoBehaviour
             if ( nextSceneID >= 3 )
                   nextSceneID = 0;
             SceneManager.LoadScene(nextSceneID);
-            gameView.ShowStartPanel( );
+            _gameView.ShowStartPanel( );
       }
       void Update( ) {
 

@@ -21,6 +21,4 @@ public class DestroyBeh : MonoBehaviour
       private void Destroy( ) {
             Destroy( gameObject );
       }
-
-
 }
