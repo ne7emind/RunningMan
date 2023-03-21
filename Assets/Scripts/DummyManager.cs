@@ -56,8 +56,11 @@ abstract public class DummyManager : MonoBehaviour
             DummiesCount--;
             DummiesAmountChanged?.Invoke( DummiesCount.ToString( ) );
             if ( DummiesCount <= 0 ) {
-                  Destroy( gameObject );
+                  Destroy( );
             }
+      }
+      public virtual void Destroy( ) {
+            Destroy( gameObject );
       }
 
       public void AddDummies( int value ) {

@@ -10,6 +10,7 @@ public class PlayerDummyManager : DummyManager
       private DummyController _dummyController;
       public event System.Action<int> ScoreOnFinish;
       public event System.Action OnFinishReach;
+      public event System.Action playerDead;
       [SerializeField] private int _dummiesCount = 1;
       [SerializeField] private int startDummyAmount;
       [SerializeField] private int score;
@@ -71,6 +72,10 @@ public class PlayerDummyManager : DummyManager
             CoinsUpdated?.Invoke( score );
            
             
+      }
+      public override void Destroy( ) {
+            base.Destroy( );
+            playerDead?.Invoke( );
       }
 
       public void OnTriggerEnter( Collider other ) {

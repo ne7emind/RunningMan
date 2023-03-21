@@ -18,6 +18,12 @@ public class GameManager : MonoBehaviour
             dummyManager.OnFinishReach += ( ) => {
                   Invoke( nameof( OnLevelFinish ) , 1f );
             };
+            dummyManager.playerDead += ( ) => {
+                  Invoke( nameof( RestartLevel ) , 1f );
+            };
+      }
+      public void RestartLevel( ) {
+            SceneManager.LoadScene( _levelIndex );
       }
       public void LevelBegin( ) {
             controller.enabled = true;
